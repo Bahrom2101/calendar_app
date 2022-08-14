@@ -12,7 +12,7 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
   final int _limit = 10;
   int _page = 1;
 
-  NewsBloc() : super(NewsState(news: const [])) {
+  NewsBloc() : super(const NewsState(news: [])) {
     on<InitialNews>(_initial);
     on<FetchEvent>(_onFetch);
   }
@@ -23,21 +23,23 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
   }
 
   _onFetch(FetchEvent event, Emitter<NewsState> emitter) async {
+    if(state.isFetching) {
+      return;
+    }
     emitter(state.copyWith(isFetching: true));
-    await Future.delayed(const Duration(seconds: 2));
+    // print('page: $_page');
     var result = await NewsRepository.instance.getNews(_limit, _page);
     if (result is List<News>) {
       _page++;
-      List<News> list = [];
-      list.addAll(event.news);
+      List<News> list = state.news;
       list.addAll(result);
       emitter(state.copyWith(
         news: list,
+        isFetching: false
       ));
     } else {
       // show error message
     }
-    emitter(state.copyWith(isFetching: false));
   }
 
   Future getNews(Emitter<NewsState> emitter) async {
@@ -46,6 +48,7 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
       _page++;
       emitter(state.copyWith(
         news: result,
+        isFetching: false
       ));
     } else {
       // show error message

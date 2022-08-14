@@ -12,27 +12,31 @@ class NewsItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          maxLines: 2,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
+    return SizedBox(
+      height: 80,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            maxLines: 1,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
           ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          body,
-          style: const TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w400,
+          const SizedBox(height: 8),
+          Text(
+            body,
+            maxLines: 3,
+            style: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w400,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

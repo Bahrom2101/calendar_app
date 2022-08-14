@@ -1,14 +1,13 @@
 part of 'news_bloc.dart';
 
-// ignore: must_be_immutable
 class NewsState extends Equatable {
-  NewsState({
+  const NewsState({
     required this.news,
-    this.isFetching = false,
+    this.isFetching = true,
   });
 
-  List<News> news;
-  bool isFetching;
+  final List<News> news;
+  final bool isFetching;
 
   NewsState copyWith({
     List<News>? news,

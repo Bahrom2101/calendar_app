@@ -15,9 +15,7 @@ class InitialNews extends NewsEvent {
 }
 
 class FetchEvent extends NewsEvent {
-  const FetchEvent({required this.news});
-
-  final List<News> news;
+  const FetchEvent();
 
   @override
   List<Object> get props => [];

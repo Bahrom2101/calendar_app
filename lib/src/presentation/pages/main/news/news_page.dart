@@ -9,54 +9,58 @@ class NewsPage extends StatelessWidget {
 
   final ScrollController _scrollController = ScrollController();
 
+  setListener(NewsBloc bloc) {
+    _scrollController.addListener(() {
+      if (_scrollController.offset ==
+          _scrollController.position.maxScrollExtent) {
+        bloc.add(const FetchEvent());
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    var bloc = context.read<NewsBloc>();
+    setListener(bloc);
     return BlocBuilder<NewsBloc, NewsState>(
-      builder: (context, state) {
-        return SingleChildScrollView(
-          controller: _scrollController
-            ..addListener(() {
-              if (_scrollController.offset ==
-                      _scrollController.position.maxScrollExtent &&
-                  !state.isFetching) {
-                context.read<NewsBloc>().add(FetchEvent(news: state.news));
-              }
-            }),
-          child: Column(
-            children: [
-              ListView.separated(
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: state.news.length,
-                shrinkWrap: true,
-                itemBuilder: (_, index) => Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 5,
-                    horizontal: 5,
-                  ),
-                  child: NewsItem(
-                      title: state.news[index].title ?? '',
-                      body: state.news[index].body ?? ''),
+      builder: (_, state) {
+        return ListView.separated(
+          controller: _scrollController,
+          itemCount: state.news.length + (state.isFetching ? 1 : 0),
+          shrinkWrap: true,
+          itemBuilder: (_, index) {
+            if (index < state.news.length) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 5,
+                  horizontal: 5,
                 ),
-                separatorBuilder: (_, index) => const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 8.0),
-                  child: Divider(
-                    thickness: 0.5,
-                    height: 0.5,
-                    color: AppColors.black,
-                  ),
-                ),
-              ),
-              if (state.isFetching)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    SizedBox(
-                        width: 35,
-                        height: 35,
-                        child: CircularProgressIndicator()),
-                  ],
-                )
-            ],
+                child: NewsItem(
+                    title: '${state.news[index].id}.${state.news[index].title}',
+                    body: state.news[index].body ?? ''),
+              );
+            } else {
+              Future.delayed(const Duration(milliseconds: 30)).then((value) =>
+                  _scrollController
+                      .jumpTo(_scrollController.position.maxScrollExtent));
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  SizedBox(
+                      width: 35,
+                      height: 35,
+                      child: CircularProgressIndicator()),
+                ],
+              );
+            }
+          },
+          separatorBuilder: (_, index) => const Padding(
+            padding: EdgeInsets.symmetric(vertical: 8.0),
+            child: Divider(
+              thickness: 0.5,
+              height: 0.5,
+              color: AppColors.black,
+            ),
           ),
         );
       },

@@ -1,3 +1,4 @@
+import 'package:calendar/src/core/constants/constants.dart';
 import 'package:calendar/src/core/utils/input_formatter.dart';
 import 'package:calendar/src/presentation/components/calendar.dart';
 import 'package:calendar/src/presentation/pages/main/home/bloc/home_bloc.dart';
@@ -94,6 +95,11 @@ class HomePage extends StatelessWidget {
                   greyPositions: state.greyPositions,
                   yellowPositions: state.yellowPositions,
                   greenPositions: state.greenPositions,
+                  onTap: (color, day) {
+                    Constants.scaffoldKey.currentState?.showSnackBar(SnackBar(
+                        content:
+                            Text('Color: ${color.toString()}, day: $day')));
+                  },
                 ),
               ],
             ),

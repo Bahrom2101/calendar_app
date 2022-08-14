@@ -5,23 +5,23 @@ class Calendar extends StatelessWidget {
   const Calendar({
     Key? key,
     required this.width,
-    this.backgroundColor,
     required this.day,
     required this.month,
     required this.year,
     required this.greenPositions,
     required this.yellowPositions,
     required this.greyPositions,
+    required this.onTap,
   }) : super(key: key);
 
   final double width;
-  final Color? backgroundColor;
   final int day;
   final int month;
   final int year;
   final List<int> greenPositions;
   final List<int> yellowPositions;
   final List<int> greyPositions;
+  final Function(Color, String) onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +38,7 @@ class Calendar extends StatelessWidget {
     return Container(
       width: width,
       height: width + 2,
-      color: backgroundColor ?? AppColors.white,
+      color: AppColors.white,
       padding: const EdgeInsets.all(5),
       child: Column(
         children: [
@@ -62,7 +62,7 @@ class Calendar extends StatelessWidget {
             children: List.generate(
               allDaysCount > 0 ? allDaysCount + firstDayIndex - 1 : 0,
               (index) {
-                Color color = backgroundColor ?? AppColors.white;
+                Color color = AppColors.white;
                 if (greenPositions.contains(index + 1)) {
                   color = AppColors.green;
                 } else if (greyPositions.contains(index + 1)) {
@@ -70,29 +70,40 @@ class Calendar extends StatelessWidget {
                 } else if (yellowPositions.contains(index + 1)) {
                   color = AppColors.yellow;
                 }
-                return Container(
-                  margin: const EdgeInsets.all(2),
-                  width: 20,
-                  height: 20,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: index - (firstDayIndex - 1) < 0
-                        ? backgroundColor ?? AppColors.white
-                        : color,
-                  ),
-                  child: Center(
-                    child: Text(
-                      index - (firstDayIndex - 1) < 0
-                          ? ''
-                          : '${index - firstDayIndex + 2}',
-                      style: TextStyle(
-                          fontSize: 15,
-                          color: (index + 1) % 7 == 0
-                              ? AppColors.red
-                              : color == AppColors.green ||
-                                      color == AppColors.yellow
-                                  ? AppColors.white
-                                  : AppColors.black),
+                return GestureDetector(
+                  onTap: () {
+                    if (color != AppColors.white) {
+                      onTap(
+                          color,
+                          index - (firstDayIndex - 1) < 0
+                              ? ''
+                              : '${index - firstDayIndex + 2}');
+                    }
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.all(2),
+                    width: 20,
+                    height: 20,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: index - (firstDayIndex - 1) < 0
+                          ? AppColors.white
+                          : color,
+                    ),
+                    child: Center(
+                      child: Text(
+                        index - (firstDayIndex - 1) < 0
+                            ? ''
+                            : '${index - firstDayIndex + 2}',
+                        style: TextStyle(
+                            fontSize: 15,
+                            color: (index + 1) % 7 == 0
+                                ? AppColors.red
+                                : color == AppColors.green ||
+                                        color == AppColors.yellow
+                                    ? AppColors.white
+                                    : AppColors.black),
+                      ),
                     ),
                   ),
                 );

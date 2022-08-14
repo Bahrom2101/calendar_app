@@ -1,5 +1,6 @@
 import 'package:calendar/src/config/route/app_routes.dart';
 import 'package:calendar/src/config/theme/app_themes.dart';
+import 'package:calendar/src/core/constants/constants.dart';
 import 'package:calendar/src/presentation/pages/main/bloc/main_bloc.dart';
 import 'package:calendar/src/presentation/pages/main/news/bloc/news_bloc.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,7 @@ class CalendarApp extends StatelessWidget {
           builder: (_, state) {
             return MaterialApp(
               title: 'Calendar App',
+              scaffoldMessengerKey: Constants.scaffoldKey,
               debugShowCheckedModeBanner: false,
               theme: AppThemes.light,
               routes: AppRoutes.routes,

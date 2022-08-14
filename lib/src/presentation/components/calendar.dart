@@ -63,11 +63,11 @@ class Calendar extends StatelessWidget {
               allDaysCount > 0 ? allDaysCount + firstDayIndex - 1 : 0,
               (index) {
                 Color color = AppColors.white;
-                if (greenPositions.contains(index + 1)) {
+                if (greenPositions.contains(index - firstDayIndex + 2)) {
                   color = AppColors.green;
-                } else if (greyPositions.contains(index + 1)) {
+                } else if (greyPositions.contains(index - firstDayIndex + 2)) {
                   color = AppColors.grey;
-                } else if (yellowPositions.contains(index + 1)) {
+                } else if (yellowPositions.contains(index - firstDayIndex + 2)) {
                   color = AppColors.yellow;
                 }
                 return GestureDetector(
